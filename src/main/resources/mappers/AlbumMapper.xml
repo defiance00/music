@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.company.app.AlbumMapper">
+<!-- 	<select id="selectList" resultType="Album">
+		select *from album
+		
+	</select> -->
+	<select id="selectOne" resultType="Album">
+		select *from album
+		where=#{albums}
+	
+	</select>
+	<select id="selectList" resultType="Album">
+			SELECT a.*, m.artistname, m.origin, m.genres, m.yearsactive
+		    FROM album a
+		    INNER JOIN music m
+		    ON m.artistnumber = a.artistnumber
+    </select>
+	<insert id="insert">
+		insert into album(albums,images,favtracks,clipid)
+        values(#{albums}, #{images},#{favtracks},#{clipid})
+   </insert>
+   <update id="update">
+		update album
+		set albums=#{albums}, 
+		    images=#{images}, 
+		    favtracks=#{favtracks},
+		    clipid=#{clipid}
+		where albumnumber=#{albumnumber}
+   </update>
+   <delete id="delete">
+	   	delete from album where albumnumber=#{albumnumber}
+   
+   </delete>
+</mapper>

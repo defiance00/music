@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.company.app.MusicMapper">
+	<select id="selectList" resultType="Music">
+		select from music
+		where artistname like = '%' || #{findvalue} || '%'
+	</select>
+	<select id="selectOne" resultType="Music">
+		select * from music
+		where artistnumber= #{artistnumber}
+	
+	</select>
+	<insert id="insert">
+		insert into music(artistname,genres,origin,Yearsactive)
+        values(#{artistname},#{genres},#{origin},#{Yearsactive})
+   </insert>
+   <update id="update">
+		update music
+		set artistname=#{artistname},
+		    genres=#{genres},
+		    origin=#{origin},
+		    Yearsactive=#{Yearsactive}
+		where artistnumber=#{artistnumber}
+   </update>
+   <delete id="delete">
+	   	delete from music
+		where artistnumber= #{artistnumber}
+   
+   </delete>
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.company.app.BoardMapper">
+	
+	<sql id="find">
+		
+		<if test="findkey=='email'">
+		AND EMAIL LIKE concat('%' , #{findvalue} ,'%')
+		</if> 
+		<if test="findkey=='subject'">
+		AND SUBJECT LIKE concat('%' , #{findvalue} ,'%')
+		</if>
+		<if test="findkey=='content'">
+		AND CONTENT LIKE concat('%' , #{findvalue} ,'%')
+		     
+		</if>
+		<if test="findkey=='subcon'">
+		AND (SUBJECT LIKE concat('%' , #{findvalue} ,'%')
+		   OR CONTENT LIKE concat('%' , #{findvalue} ,'%'))
+		</if>
+		
+	</sql>
+	<select id="selectTotCnt" resultType="int">
+		SELECT COUNT(*) TOTCNT 
+		FROM BOARD
+		WHERE 1=1
+		<include refid="find"/>
+		AND REMOVEYN !='y'
+	</select>
+	<select id="selectList" resultType="Board">
+		SELECT * FROM BOARD
+		WHERE 1=1
+		<include refid="find"/>
+		AND REMOVEYN !='y'
+		ORDER BY BNUM DESC
+		limit #{startNum} , #{perPage}
+		
+	</select>
+	<select id="selectOne" resultType="Board">
+		SELECT * FROM BOARD
+        WHERE BNUM= #{bnum}
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="bnum">
+		
+		INSERT INTO BOARD (EMAIL,SUBJECT,CONTENT,IP)
+        VALUES(#{email}, #{subject}, #{content}, #{ip})
+	</insert>
+	<update id="update">
+		UPDATE BOARD
+		SET EMAIL = #{email},
+		SUBJECT=#{subject},
+		CONTENT=#{content},
+		IP= #{ip},
+		MODIDATE= now()
+		WHERE BNUM= #{bnum}
+	</update>
+	<delete id="delete">
+		DELETE FROM BOARD
+        WHERE BNUM= #{bnum}
+	</delete>
+	<update id="updateRemoveYn">
+		UPDATE BOARD
+		SET REMOVEYN = 'y'
+		WHERE BNUM =#{bnum}
+	
+	</update>
+	
+	<!-- 조회수+1 -->
+	<update id="updateReadCnt">
+		UPDATE BOARD
+		SET READCNT =READCNT+1
+		WHERE BNUM= #{bnum}
+	</update>
+
+</mapper>
